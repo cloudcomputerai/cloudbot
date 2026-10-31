@@ -111,7 +111,7 @@ describe("message_person", () => {
     expect(f.team.inbox.home(key(CARL.email)), "nobody who left gets an inbox").toBeNull();
   });
 
-  it("uses the person's own MausBot when they crowned no Chief", () => {
+  it("uses the person's own CloudComputerAI when they crowned no Chief", () => {
     const f = fixture({ noChiefFor: [BEN.email] });
     f.bots.push({ id: "bens-mausbot", name: "MausBot", color: "silver", threadId: "mm-main", defaultBot: { person: BEN.email }, tasks: [{ threadId: "mm-main", title: "MausBot" }] });
     f.team.pass("scout", "cleo-private", "Ben", "Ping");
@@ -153,7 +153,7 @@ describe("@Ben", () => {
     expect(f.notified.map((one) => [one.forPerson, one.title, one.threadId])).toEqual([
       [key(BEN.email), "Cleo mentioned you in Scout", inbox.threadId], [key(ADA.email), "Cleo mentioned you in Scout", "scout-main"],
     ]);
-    expect(f.team.inbox.home(key(ADA.email)), "Ada has no Chief and no MausBot, so her tag reaches her where it was written").toBeNull();
+    expect(f.team.inbox.home(key(ADA.email)), "Ada has no Chief and no CloudComputerAI, so her tag reaches her where it was written").toBeNull();
     expect(f.team.needsYou(session(BEN.email))).toHaveLength(1);
     f.team.seen(session(BEN.email), inbox.threadId);
     expect(f.team.needsYou(session(BEN.email))).toEqual([]);

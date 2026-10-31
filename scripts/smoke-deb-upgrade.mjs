@@ -21,7 +21,7 @@ try {
     encoding: "utf8",
     stdio: ["ignore", "pipe", "ignore"],
   }).trim();
-  if (status.startsWith("ii")) fail("refusing to replace a pre-existing OpenMausBot installation");
+  if (status.startsWith("ii")) fail("refusing to replace a pre-existing CloudComputerAI installation");
 } catch (error) {
   if (String(error?.message ?? error).includes("refusing to replace")) throw error;
 }
@@ -45,8 +45,8 @@ try {
       "Package: openmausbot",
       "Version: 0.1.7",
       "Architecture: amd64",
-      "Maintainer: OpenMausBot CI <ci@openmausbot.invalid>",
-      "Description: Legacy OpenMausBot directory-mode upgrade fixture",
+      "Maintainer: CloudComputerAI CI <ci@openmausbot.invalid>",
+      "Description: Legacy CloudComputerAI directory-mode upgrade fixture",
       "",
     ].join("\n"),
     { mode: 0o644 },

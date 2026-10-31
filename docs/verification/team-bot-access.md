@@ -22,7 +22,7 @@ pnpm exec vitest run server/cloud-team-bot-access.e2e.test.ts server/bot-access.
   Dan changes instructions, apps and sharing but not the approval level, folder, computer, department, Chief, peers or
   visibility; Eve gets 404. A message another app relays (the guarded route's `onBehalfOf`) goes through only for
   someone who can chat. Bob's live stream gets his new level with no sharing in it, then ends when he is removed; the
-  owner always edits, keeps editing after handing the bot on, and each person's own MausBot stays theirs. Bots made
+  owner always edits, keeps editing after handing the bot on, and each person's own CloudComputerAI stays theirs. Bots made
   before levels keep exactly what their visibility gave.
 - `server/bot-access.test.ts` covers the level rules: the mapping from visibility and back, a member's level (owner,
   damaged sharing, `@domain` entries), each copy of a bot, what each route needs, each level's bot fields, a card that

@@ -1,5 +1,5 @@
 // @vitest-environment happy-dom
-// The first run's second screen: MausBot as the Chief of Staff (Create) or a bot the person already has (Choose).
+// The first run's second screen: CloudComputerAI as the Chief of Staff (Create) or a bot the person already has (Choose).
 import { act, createElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -69,7 +69,7 @@ afterEach(async () => {
 });
 
 describe("Create", () => {
-  it("fades the dialog and scrim, flies MausBot to its tile, and opens the chat when the flight ends, on its own clock", async () => {
+  it("fades the dialog and scrim, flies CloudComputerAI to its tile, and opens the chat when the flight ends, on its own clock", async () => {
     f.reduced = false;
     await show();
     await press("Create Chief of Staff");
@@ -88,7 +88,7 @@ describe("Create", () => {
     expect(f.onDone).toHaveBeenCalledExactlyOnceWith("maus");
   });
 
-  it("on a new install is the only action: MausBot, already its Chief, lands in the sidebar and its chat opens", async () => {
+  it("on a new install is the only action: CloudComputerAI, already its Chief, lands in the sidebar and its chat opens", async () => {
     await show();
     expect(text()).toContain("Introducing your Chief of Staff");
     expect(text()).toContain("Your main point of contact. It checks in on its own and coordinates work with your other bots.");
@@ -103,7 +103,7 @@ describe("Create", () => {
     expect(introStaged("maus")).toBe(true);
   });
 
-  it("makes MausBot the Chief where the place has none, and brings it back to the sidebar", async () => {
+  it("makes CloudComputerAI the Chief where the place has none, and brings it back to the sidebar", async () => {
     f.state = { ...f.state, bots: [maus({ chiefOfStaff: false, sidebarHidden: true })] };
     await show();
     await choose("Create Chief of Staff");

@@ -88,7 +88,7 @@ const BUDGET_BASELINE: Record<string, number> = {
   "skills": 16601,
   "skills+voice": 17382,
   "skills+shared": 16641,
-  "skills+shared+voice": 17084,
+  "skills+shared+voice": 17462,
   "non-chief": 16457,
   "voice+non-chief": 17238,
   "shared+non-chief": 16497,
@@ -99,12 +99,12 @@ const BUDGET_BASELINE: Record<string, number> = {
   "skills+shared+voice+non-chief": 17305,
   "skills+shared+voice+cloud-home": 17438,
   "skills+shared+voice+non-chief+cloud-home": 17303,
-  "skills+shared+voice+escalations": 17102,
-  "skills+shared+voice+escalations+x": 17163,
-  "skills+shared+voice+escalations+x+team": 17179,
+  "skills+shared+voice+escalations": 17480,
+  "skills+shared+voice+escalations+x": 17541,
+  "skills+shared+voice+escalations+x+team": 17557,
   "default+legacy-switches": 16574,
   "default+mausbot": 16626,
-  "skills+shared+voice+mausbot": 17136,
+  "skills+shared+voice+mausbot": 17514,
   "default+no-computer-pick": 15341,
   "default+room": 15301,
   "non-chief+room": 15184,
@@ -115,7 +115,7 @@ type RpcAnswer = { id: number; result?: { tools?: unknown[]; content?: Array<{ t
 /** One freshly spawned proxy's raw answer lines to `requests`, in the order
  * asked, read off its stdout as they arrive. */
 async function proxyLines(entry: string, env: Record<string, string>, requests: Array<{ method: string; params?: unknown }>): Promise<string[]> {
-  // A developer shell (or an OpenMausBot turn running this suite) can carry
+  // A developer shell (or an CloudComputerAI turn running this suite) can carry
   // OMB_* switches of its own; the profile must be the only source.
   const inherited = Object.fromEntries(Object.entries(process.env).filter(([key]) => !key.startsWith("OMB_")));
   const child = spawn(process.execPath, [entry], {

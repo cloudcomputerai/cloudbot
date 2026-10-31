@@ -349,7 +349,7 @@ describe("OpenCode catalog", () => {
     },
   );
 
-  it("points a rejected Zen key at the key OpenMaus saves", () => {
+  it("points a rejected Zen key at the key CloudComputerAI saves", () => {
     expect(describeOpenCodeAccountError("invalid_credentials", "opencode/big-pickle")).toContain("Settings → API keys");
     for (const model of [undefined, "opencode/big-pickle", "opencode-go/minimax-m3"]) {
       expect(describeOpenCodeAccountError("invalid_credentials", model)).not.toContain("opencode auth login");
@@ -959,7 +959,7 @@ describe("OpenCode catalog probes", () => {
   });
 });
 
-describe("OpenCode access to folders OpenMaus owns", () => {
+describe("OpenCode access to folders CloudComputerAI owns", () => {
   it("names the attachments folder and only this bot's shared folder", () => {
     expect(openCodeOwnedDirectories("bot-7")).toEqual([ATTACHMENTS_DIR, workspaceDir("bot-7")]);
     expect(openCodeOwnedDirectories("..")).toEqual([ATTACHMENTS_DIR]);
@@ -984,7 +984,7 @@ describe("OpenCode access to folders OpenMaus owns", () => {
     expect(allowed).not.toContain(join(TASK_WORKSPACES_DIR, "bot-7"));
   });
 
-  it("switches off project config only in OpenMaus's own working folders", () => {
+  it("switches off project config only in CloudComputerAI's own working folders", () => {
     expect(openMausOwnsWorkingFolder(join(TASK_WORKSPACES_DIR, "bot-7", "thread-1"))).toBe(true);
     expect(openMausOwnsWorkingFolder(workspaceDir("bot-7"))).toBe(true);
     expect(openMausOwnsWorkingFolder(TASK_WORKSPACES_DIR)).toBe(false);
@@ -992,7 +992,7 @@ describe("OpenCode access to folders OpenMaus owns", () => {
     expect(openMausOwnsWorkingFolder(`${TASK_WORKSPACES_DIR}-elsewhere`)).toBe(false);
   });
 
-  it("keeps the person's single folder rule ahead of OpenMaus's folders", () => {
+  it("keeps the person's single folder rule ahead of CloudComputerAI's folders", () => {
     const scratch = mkdtempSync(join(tmpdir(), "omb-opencode-folder-rule-"));
     try {
       const configDir = join(scratch, "config", "opencode");
@@ -1397,7 +1397,7 @@ describe("OpenCode ready only through its free models", () => {
 });
 
 describe("OpenCode one-off calls (connection checks, memory upkeep)", () => {
-  it("file their session under OpenMaus's own OpenCode project, never the global one the person's other folders share", async () => {
+  it("file their session under CloudComputerAI's own OpenCode project, never the global one the person's other folders share", async () => {
     const scratch = mkdtempSync(join(tmpdir(), "omb-opencode-oneshot-"));
     const requests = join(scratch, "requests.jsonl");
     const driver = createOpenCodeDriver(async () => catalog("opencode/big-pickle"));

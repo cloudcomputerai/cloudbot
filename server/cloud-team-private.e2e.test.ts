@@ -115,7 +115,7 @@ it("Bob reads and writes his own private chat, with its words, its file, his sea
   expect((await team.as(bob, "DELETE", `/api/attachments/${bobFile}`)).status).toBe(409);
   expect((await team.as(bob, "DELETE", `/api/attachments/${discarded}`)).status).toBe(200);
   expect(existsSync(dataDir("attachments", discarded))).toBe(false);
-  // He changes no team bot's look, which everyone sees; his own MausBot's he does.
+  // He changes no team bot's look, which everyone sees; his own CloudComputerAI's he does.
   const recolour = await team.as(bob, "PATCH", `/api/bots/${bot.id}`, { color: "blue" });
   expect(recolour.status).toBe(403);
   expect(recolour.body.error).toContain("\"color\"");
@@ -322,7 +322,7 @@ it("when Bob leaves the team, his private chats and everything only his are dele
   expect(roomReads(), "where he read up to in each room goes too").not.toContain(bobKey);
   expect((await team.as(owner, "DELETE", `/api/groups/${room.id}`)).status).toBe(200);
   expect(roomReads(), "a deleted room's read lines go with it").not.toContain(room.id);
-  // His own MausBot and its chat go with him.
+  // His own CloudComputerAI and its chat go with him.
   for (const token of [owner, admin]) {
     expect(((await team.as(token, "GET", "/api/bots")).body.bots as Array<{ id: string }>).map((entry) => entry.id)).not.toContain(bobsMausBot.id);
     expect((await messages(token, bobsMausBot.threadId)).status).toBe(404);

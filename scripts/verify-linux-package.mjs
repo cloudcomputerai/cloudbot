@@ -72,7 +72,7 @@ function requireUpdaterTarget(resources, label) {
   const updateFile = path.join(resources, "app-update.yml");
   requireFile(updateFile);
   const update = readFileSync(updateFile, "utf8");
-  if (!/^owner: milind-soni$/m.test(update) || !/^repo: OpenMausBot$/m.test(update)) {
+  if (!/^owner: milind-soni$/m.test(update) || !/^repo: CloudComputerAI$/m.test(update)) {
     fail(`${label} app-update.yml does not point at milind-soni/OpenMausBot`);
   }
 }
@@ -468,7 +468,7 @@ try {
   requireFile(scalableIcon);
   const desktop = readFileSync(desktopFile, "utf8");
   for (const expected of [
-    "Name=OpenMausBot",
+    "Name=CloudComputerAI",
     "Exec=/opt/OpenMausBot/openmausbot %U",
     "Icon=openmausbot",
     "StartupWMClass=com.openmausbot.app",
