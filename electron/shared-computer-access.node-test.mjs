@@ -498,7 +498,7 @@ test("a protected directory spelled in another case is still refused", async t =
   await writeFile(path.join(dir, "OpenMausBot", "credentials.bin"), "credential blob");
   grant.protectedPaths = [path.join(dir, "OpenMausBot")];
   folder.write = true;
-  await assert.rejects(run({ action: "read_file", path: "CloudComputerAI/credentials.bin" }), /Desktop credentials/);
+  await assert.rejects(run({ action: "read_file", path: "OpenMausBot/credentials.bin" }), /Desktop credentials/);
   await assert.rejects(run({ action: "read_file", path: "openmausbot/credentials.bin" }), /Desktop credentials/);
   await assert.rejects(run({ action: "read_file", path: "OPENMAUSBOT/credentials.bin" }), /Desktop credentials/);
   await assert.rejects(run({ action: "list_files", path: "openmausbot" }), /Desktop credentials/);
