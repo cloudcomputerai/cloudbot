@@ -1964,7 +1964,7 @@ const STEP_CAP_NOTE = "Your previous turn stopped at the step limit; continue fr
 const teamSetupDecisionText = (request: TeamSetupRequest): string =>
   `CloudComputerAI team setup decision ${request.requestId}: ${JSON.stringify(request.result)}. Report this exact result and continue the user's already requested work. Do not ask for confirmation again or repeat this setup/deletion. A denied or cancelled operation did not authorize any substitute action. Existing thread models were not changed.`;
 const connectionUpdateText = (labels: readonly string[]): string =>
-  `OpenMausBot connection update: the user securely connected ${labels.join(", ")}. Continue the task that paused for this connection. Do not ask them to connect it again.`;
+  `CloudComputerAI connection update: the user securely connected ${labels.join(", ")}. Continue the task that paused for this connection. Do not ask them to connect it again.`;
 
 function resumableCards(threadId: string, since: number, memberId?: string) { return cardsWaitedOn(store, threadId, since, memberId); }
 
