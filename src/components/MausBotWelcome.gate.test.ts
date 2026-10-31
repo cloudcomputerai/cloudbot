@@ -1,5 +1,5 @@
 // @vitest-environment happy-dom
-// When MausBot's first-launch card may open: like the Cloud Pro popup and the product-updates question, never over the
+// When CloudComputerAI's first-launch card may open: like the Cloud Pro popup and the product-updates question, never over the
 // first chat before a reply, never in the launch the welcome finished, never while the app tour runs, and never in the
 // same launch as those two.
 import { act, createElement } from "react";
@@ -96,7 +96,7 @@ it("Escape keeps the card as seen, so it does not come back and claim every late
   expect(document.querySelector("[data-mausbot-welcome]"), "closed").toBeNull();
 });
 
-it("never comes after a first run that met the Chief, which already introduced MausBot; an older install still gets it once", async () => {
+it("never comes after a first run that met the Chief, which already introduced CloudComputerAI; an older install still gets it once", async () => {
   f.state = { ...f.state, bots: [{ ...maus(1), welcomed: true }] };
   await show();
   expect(opened()).toBe(false);

@@ -1,4 +1,4 @@
-# OpenMausBot Enterprise
+# CloudComputerAI Enterprise
 
 Source-available features for hosted and white-labelled deployments. This
 folder has its own [LICENSE](./LICENSE); everything outside it is Apache 2.0.

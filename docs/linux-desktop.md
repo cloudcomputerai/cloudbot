@@ -1,12 +1,12 @@
 # Ubuntu Desktop
 
-OpenMausBot has an Ubuntu 24.04 LTS x86_64 desktop beta. The Electron package embeds the harness server, so
+CloudComputerAI has an Ubuntu 24.04 LTS x86_64 desktop beta. The Electron package embeds the harness server, so
 installed builds do not require Node, pnpm, Swift, or a terminal at runtime. For giving a bot the same kind
 of Linux desktop on your own server instead of this machine, see [byo-vps.md](byo-vps.md).
 
 ## What works
 
-- The native Electron window and embedded OpenMausBot server on GNOME Xorg and GNOME Wayland.
+- The native Electron window and embedded CloudComputerAI server on GNOME Xorg and GNOME Wayland.
 - Local Claude, Codex, Grok, Gemini, and other configured agent CLIs.
 - Chat, streaming turns, approvals, bot-to-bot communication, and local data storage.
 - Composio connected apps and Boat cloud computers.
@@ -49,7 +49,7 @@ Requirements for building from source:
 
 ```sh
 git clone https://github.com/milind-soni/OpenMausBot.git
-cd OpenMausBot
+cd CloudComputerAI
 corepack enable
 pnpm install --frozen-lockfile
 pnpm package:linux
@@ -70,7 +70,7 @@ Install a downloaded Debian package with APT so its desktop dependencies are res
 sudo apt install ./OpenMausBot-amd64.deb
 ```
 
-Then open **OpenMausBot** from the GNOME application launcher. To remove it:
+Then open **CloudComputerAI** from the GNOME application launcher. To remove it:
 
 ```sh
 sudo apt remove openmausbot
@@ -91,7 +91,7 @@ The app checks for updates in the background and downloads them by itself. Nothi
 **Restart to update**.
 
 - **Debian package.** The click asks for your password once, in the system's own prompt, installs the update with
-  `apt-get` (so new dependencies are resolved) and reopens OpenMausBot. The downloaded file is copied to a
+  `apt-get` (so new dependencies are resolved) and reopens CloudComputerAI. The downloaded file is copied to a
   root-only folder and checked against the checksum in the update feed first; a file that does not match is
   refused and nothing is installed. Closing the prompt leaves the update ready to try again. If the session cannot
   show a prompt (SSH, no desktop, no `pkexec`), the app falls back to copying the `sudo apt-get install` command
@@ -134,7 +134,7 @@ pnpm package:linux:dir
 
 ## Agent CLI discovery
 
-Applications launched from GNOME do not inherit the same interactive shell `PATH` as a terminal. OpenMausBot
+Applications launched from GNOME do not inherit the same interactive shell `PATH` as a terminal. CloudComputerAI
 keeps the inherited path and adds existing common locations such as:
 
 - `~/.local/bin`
@@ -153,13 +153,13 @@ path before launching the app from a terminal and verify it there:
 OMB_EXTRA_PATH=/your/custom/bin ./release/OpenMausBot-*-x86_64.AppImage
 ```
 
-Restart OpenMausBot after installing or signing in to a CLI.
+Restart CloudComputerAI after installing or signing in to a CLI.
 
 ## Xorg and Wayland
 
 The shell, chat, cloud computers, connected apps, and preview-only capture work in both GNOME session types.
 The Wayland chooser/select/persistent-stream/cancel/end/retry lifecycle has been validated in a real Ubuntu
-24.04 GNOME Wayland session. OpenMausBot detects Wayland before XWayland when both `WAYLAND_DISPLAY` and
+24.04 GNOME Wayland session. CloudComputerAI detects Wayland before XWayland when both `WAYLAND_DISPLAY` and
 `DISPLAY` exist, so capture cannot accidentally bypass portal-mediated behavior.
 
 Open the Computer panel and use the separate **Preview this computer** card. Capture never starts when the app
@@ -170,7 +170,7 @@ or panel opens.
   you press **Stop preview**, close the panel, end sharing from GNOME, or quit the app.
 
 Cancelling or ending Wayland sharing returns to a calm **Try again** state and never reopens the chooser
-automatically. OpenMausBot does not capture screen audio, remember the selected monitor after restart, or
+automatically. CloudComputerAI does not capture screen audio, remember the selected monitor after restart, or
 offer an **Open Settings** action on Linux.
 
 Local computer control is independent from preview. It is available after explicit opt-in on Xorg and remains
@@ -181,7 +181,7 @@ fail-closed on Wayland. XWayland's `DISPLAY` never bypasses the Wayland safety g
 Installed `.deb` and AppImage builds include the certified **Cua Driver 0.19.3** CLI and cursor-theme sidecar.
 On GNOME Xorg, open Settings, choose **Enable local control (Beta)**, wait for **Ready**, then explicitly assign a bot
 to **This computer**. No driver download, terminal command, `chmod`, or daemon setup is required. The owned daemon
-starts with `--no-overlay`, so Cua's decorative full-screen X11 cursor surface is never created. OpenMausBot also
+starts with `--no-overlay`, so Cua's decorative full-screen X11 cursor surface is never created. CloudComputerAI also
 uses Electron software rendering when the NVIDIA driver is loaded, to avoid the reproduced NVIDIA/libGLES
 GPU-process failure that could leave an invisible focused app window receiving input. Other GPUs keep hardware
 acceleration, because software rendering costs about a CPU core while the window animates. Set `OMB_LINUX_GPU=off`
@@ -220,7 +220,7 @@ package-owned path to `root:root 0755` automatically.
 The packaged runtime remains outside ASAR for deterministic provenance and validation. In packaged builds neither a
 `CUA_DRIVER_PATH` value nor an ambient PATH candidate can replace it; on Wayland neither can bypass the safety gate.
 
-The Xorg runtime uses private sockets, standard permission mode, per-action OpenMausBot approvals,
+The Xorg runtime uses private sockets, standard permission mode, per-action CloudComputerAI approvals,
 telemetry/update-check suppression, strict driver identity, overlay-free startup, and lifecycle cleanup tests. Those
 defenses remain necessary, but none substitutes for the real-seat acceptance evidence required to enable Wayland. Linux
 **Auto** never routes to the user's desktop, and no Cloud or Local VM approval can authorize it.
@@ -250,7 +250,7 @@ contract without activating it in a packaged app. Only a real-seat acceptance ma
 
 ### An agent CLI is missing
 
-Run the CLI directly in a terminal, finish its sign-in flow, then restart OpenMausBot. If it lives outside the
+Run the CLI directly in a terminal, finish its sign-in flow, then restart CloudComputerAI. If it lives outside the
 common directories above, use `OMB_EXTRA_PATH` while testing and report the install location so it can be
 considered for automatic discovery.
 
