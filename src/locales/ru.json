@@ -1068,7 +1068,7 @@
   "files.almostFull": "Облако почти заполнено.",
   "files.outputs.title": "Результаты работы ваших ботов",
   "files.outputs.switch": "Сохранять результаты облачных ботов на этот компьютер",
-  "files.outputs.help": "В Documents › CloudComputerAI — отдельная папка для каждого бота.",
+  "files.outputs.help": "В Documents › MausBot — отдельная папка для каждого бота.",
   "files.outputs.open": "Открыть папку",
   "files.offline": "Сейчас облако недоступно. Файлы продолжат работу, когда связь восстановится.",
   "files.asleep": "Облако спит. Файлы синхронизируются, когда оно проснётся.",

@@ -1199,7 +1199,7 @@
   "files.almostFull": "The Cloud is almost full.",
   "files.outputs.title": "Your bots' work",
   "files.outputs.switch": "Save what Cloud bots make to this computer",
-  "files.outputs.help": "In Documents › CloudComputerAI, one folder for each bot.",
+  "files.outputs.help": "In Documents › MausBot, one folder for each bot.",
   "files.outputs.open": "Open folder",
   "files.offline": "The Cloud can't be reached right now. Files carry on when it's back.",
   "files.asleep": "The Cloud is asleep. Files sync when it wakes.",

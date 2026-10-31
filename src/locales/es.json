@@ -948,7 +948,7 @@
   "files.almostFull": "Queda poco espacio en la Cloud.",
   "files.outputs.title": "El trabajo de tus bots",
   "files.outputs.switch": "Guardar en este equipo lo que crean los bots de la Cloud",
-  "files.outputs.help": "En Documentos › CloudComputerAI, una carpeta por bot.",
+  "files.outputs.help": "En Documentos › MausBot, una carpeta por bot.",
   "files.outputs.open": "Abrir carpeta",
   "files.offline": "No se puede conectar con la Cloud ahora mismo. Los archivos seguirán cuando vuelva.",
   "files.asleep": "La Cloud está en reposo. Los archivos se sincronizan cuando se despierte.",

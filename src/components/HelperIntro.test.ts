@@ -53,7 +53,7 @@ const { SIMPLE_BOT_BUBBLE } = await import("./chat-bubble");
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
 const claude = (ready: boolean): InstanceInfo => ({ instanceId: "claude", driverKind: "claudeAgent", displayName: "Claude",
   snapshot: { state: ready ? "available" : "unavailable", authenticated: ready }, models: { default: "m", options: [] } });
-const maus = (extra: Partial<Bot> = {}): Bot => ({ id: "maus", threadId: "t", name: "MausBot", title: "", description: "", notifications: true,
+const maus = (extra: Partial<Bot> = {}): Bot => ({ id: "maus", threadId: "t", name: "CloudComputerAI", title: "", description: "", notifications: true,
   color: "chrome", unread: false, modelSelection: { instanceId: "claude", model: "m" }, messages: [], defaultBot: {}, chiefOfStaff: true, ...extra });
 const intro: Message = { id: "intro", role: "bot", kind: "options", at: 1, helperIntro: true, text: "Hey! I'm CloudComputerAI. I'm new here.",
   card: { title: "Hey! I'm CloudComputerAI. I'm new here.", subtitle: "", options: ["What are my bots up to?"] } };
@@ -107,15 +107,15 @@ describe("what CloudComputerAI says first", () => {
       "I'm here to be your Chief of Staff. I can manage your other bots. Task me with anything. I'll make sure it gets to the right bot.",
       "I'm taking a look around to see if there's anything I can pick up for you. I'll follow up in a moment.",
     ];
-    expect(introLines({ name: "MausBot", chief: true })).toEqual(said);
-    expect(introLines({ name: "MausBot", chief: true, person: "Ada" })).toEqual(said);
-    expect(introLines({ name: "MausBot", chief: true, team: "Acme" })[1]).toBe(`${said[1]} On Acme, I'm here for you and look after your own bots.`);
+    expect(introLines({ name: "CloudComputerAI", chief: true })).toEqual(said);
+    expect(introLines({ name: "CloudComputerAI", chief: true, person: "Ada" })).toEqual(said);
+    expect(introLines({ name: "CloudComputerAI", chief: true, team: "Acme" })[1]).toBe(`${said[1]} On Acme, I'm here for you and look after your own bots.`);
   });
 
   it("keeps a helper's lines for a CloudComputerAI that is not the Chief", () => {
-    expect(introLines({ name: "MausBot", chief: false })[0]).toBe("Hi! I'm CloudComputerAI, your helper for everything here.");
-    expect(introLines({ name: "MausBot", chief: false, person: "Ada" })[0]).toBe("Hi Ada! I'm CloudComputerAI, your helper for everything here.");
-    const member = introLines({ name: "MausBot", chief: false, team: "Acme" });
+    expect(introLines({ name: "CloudComputerAI", chief: false })[0]).toBe("Hi! I'm CloudComputerAI, your helper for everything here.");
+    expect(introLines({ name: "CloudComputerAI", chief: false, person: "Ada" })[0]).toBe("Hi Ada! I'm CloudComputerAI, your helper for everything here.");
+    const member = introLines({ name: "CloudComputerAI", chief: false, team: "Acme" });
     expect(member[1]).toBe("Ask me how to do anything here. I can set up bots, apps and routines with you. On Acme, I'm here for you and look after your own bots.");
   });
 
@@ -266,7 +266,7 @@ describe("in Advanced mode", () => {
 
   it("is the one bubble it always was: who it is, the setup still to do, and asks", async () => {
     await show();
-    expect(host.textContent).toContain(t("helperIntro.title", { name: "MausBot" }));
+    expect(host.textContent).toContain(t("helperIntro.title", { name: "CloudComputerAI" }));
     expect(host.textContent).toContain(t("helperIntro.chief"));
     expect(host.querySelector('[data-helper-ask="helperIntro.ask.overview"]')).not.toBeNull();
     expect(chips()).toEqual(["bots", "apps", "phone", "cloud"]);

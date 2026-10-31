@@ -1128,7 +1128,7 @@
   "files.almostFull": "클라우드 공간이 거의 찼어요.",
   "files.outputs.title": "봇이 만든 결과물",
   "files.outputs.switch": "클라우드 봇이 만든 결과물을 이 컴퓨터에 저장",
-  "files.outputs.help": "문서 › CloudComputerAI 안에 봇마다 폴더가 하나씩 생겨요.",
+  "files.outputs.help": "문서 › MausBot 안에 봇마다 폴더가 하나씩 생겨요.",
   "files.outputs.open": "폴더 열기",
   "files.offline": "지금은 클라우드에 연결할 수 없어요. 다시 연결되면 파일 작업이 이어져요.",
   "files.asleep": "클라우드가 잠들어 있어요. 깨어나면 파일이 동기화돼요.",

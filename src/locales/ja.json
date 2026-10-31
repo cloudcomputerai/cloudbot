@@ -1069,7 +1069,7 @@
   "files.almostFull": "Cloud の空き容量がほとんどありません。",
   "files.outputs.title": "ボットの成果物",
   "files.outputs.switch": "Cloud のボットが作成したものをこのコンピューターに保存",
-  "files.outputs.help": "「書類 › CloudComputerAI」内に、ボットごとにフォルダが作成されます。",
+  "files.outputs.help": "「書類 › MausBot」内に、ボットごとにフォルダが作成されます。",
   "files.outputs.open": "フォルダを開く",
   "files.offline": "現在 Cloud に接続できません。接続が回復すると、ファイルの同期が再開されます。",
   "files.asleep": "Cloud はスリープ中です。起動するとファイルが同期されます。",

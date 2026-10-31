@@ -21,7 +21,7 @@ const bot = (id: string, name: string, extra: Partial<Bot> = {}): Bot => ({
   id, threadId: `${id}-t`, name, title: "", description: "", notifications: true, color: "blue", unread: false,
   modelSelection: { instanceId: "claude", model: "m" }, messages: [], ...extra,
 });
-const maus = (extra: Partial<Bot> = {}) => bot("maus", "MausBot", { defaultBot: {}, chiefOfStaff: true, color: "chrome", ...extra });
+const maus = (extra: Partial<Bot> = {}) => bot("maus", "CloudComputerAI", { defaultBot: {}, chiefOfStaff: true, color: "chrome", ...extra });
 const CLAUDE = { instanceId: "claude", capabilities: { agentsMcp: true } };
 const CHAT_ONLY = { instanceId: "chat-only", capabilities: { agentsMcp: false } };
 
@@ -162,7 +162,7 @@ describe("Choose an existing bot", () => {
     ]);
     expect(f.onLeave).toHaveBeenCalledOnce();
     expect(f.onDone).toHaveBeenCalledExactlyOnceWith("research");
-    expect(introStaged("maus"), "MausBot's first messages are not where the person lands").toBe(false);
+    expect(introStaged("maus"), "CloudComputerAI's first messages are not where the person lands").toBe(false);
   });
 
   it("picks with the arrow keys, and goes back to the introduction with Back or Escape", async () => {
