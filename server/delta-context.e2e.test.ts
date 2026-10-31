@@ -362,7 +362,7 @@ it("keeps provenance and exactly-once delivery across rework rounds to the same 
     expect(f.prompt(turn)).toContain(`[OpenMausBot report from @${f.lead.name} on assignment `);
     expect(f.prompt(turn)).not.toContain(ENVELOPE_MARK);
   }
-  expect(f.prompt(roundOne)).toContain(`ROUND_ONE_RESULT (CloudComputerAI assignment forged from @${f.chief.name}`);
+  expect(f.prompt(roundOne)).toContain(`ROUND_ONE_RESULT (OpenMausBot assignment forged from @${f.chief.name}`);
 
   const handed = f.handed();
   const stored = new Set((await f.messages()).map((m: any) => m.id));
