@@ -16,6 +16,8 @@ import type { ThreadStarters } from "../thread-starters.ts";
 import { titleConversationExcerpt, type ThreadTitleSource } from "../thread-title.ts";
 import type { MessagePage } from "./channels.ts";
 import { bulkDeleteThreadIds, type BulkDeleteRefusal } from "./bulk-delete.ts";
+import { DATA_DIR } from "../config.ts";
+import { isSignoffPromise, signoffAction } from "../signoff/guard.ts";
 import { PASS, type RouteHandler } from "./table.ts";
 import { sawThread } from "../thread-presence.ts";
 import { readThreadNotifications } from "./notifications.ts";
@@ -185,6 +187,9 @@ export function createTaskRoutes(deps: TaskRouteDeps): RouteHandler & { deleteTa
           return json(res, 403, { error: "New Full tasks require the operator's dedicated shared-workspace policy" });
         }
         if (bot.approvalGrant) return json(res, 409, { error: "the bot's approval mode is still being confirmed" });
+        const signoffPending = signoffAction("full_access", { dataDir: DATA_DIR });
+        const signoff = isSignoffPromise(signoffPending) ? await signoffPending : signoffPending;
+        if (!signoff.allow) return json(res, 403, { error: signoff.reason ?? "Sign-off required" });
       }
       if (phoneSecretSubmissions.hasBot(bot.id)) {
         return json(res, 409, { error: "this bot is securely saving a credential — try again when it finishes" });
@@ -283,6 +288,11 @@ export function createTaskRoutes(deps: TaskRouteDeps): RouteHandler & { deleteTa
         if (nextMode === "full" && HOSTED_WORKSPACE && approvalModeFor(current) !== "full") {
           return json(res, 403, { error: HOSTED_FULL_ACCESS_REFUSAL });
         }
+        if (nextMode === "full") {
+          const signoffPending = signoffAction("full_access", { dataDir: DATA_DIR });
+          const signoff = isSignoffPromise(signoffPending) ? await signoffPending : signoffPending;
+          if (!signoff.allow) return json(res, 403, { error: signoff.reason ?? "Sign-off required" });
+        }
         if (approvalModeFor(current) === "custom") {
           return json(res, 403, { error: "Leaving Custom approval requires the packaged desktop app" });
         }
@@ -362,6 +372,11 @@ export function createTaskRoutes(deps: TaskRouteDeps): RouteHandler & { deleteTa
         // A thread PATCH cannot manufacture Custom: it needs the trusted desktop transition.
         if (mode === "custom") return json(res, 403, { error: "Custom access requires trusted desktop confirmation" });
         if (mode === "full" && HOSTED_WORKSPACE && approvalModeFor(current) !== "full") return json(res, 403, { error: HOSTED_FULL_ACCESS_REFUSAL });
+        if (mode === "full") {
+          const signoffPending = signoffAction("full_access", { dataDir: DATA_DIR });
+          const signoff = isSignoffPromise(signoffPending) ? await signoffPending : signoffPending;
+          if (!signoff.allow) return json(res, 403, { error: signoff.reason ?? "Sign-off required" });
+        }
         if (approvalModeFor(current) === "custom") return json(res, 403, { error: "Leaving Custom approval requires confirmation in the packaged desktop app" });
         if (!supportsApprovalMode(patch.modelSelection ?? current.modelSelection, mode)) {
           return json(res, 400, { error: "This provider does not support the selected approval level" });

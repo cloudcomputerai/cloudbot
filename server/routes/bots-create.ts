@@ -17,6 +17,8 @@ import { installOrgSkill, installSkill, parseSkillMd, setSkillEnabled } from "..
 import type { BotRecord, Store } from "../store.ts";
 import type { TeamPeople } from "../team-people.ts";
 import { writeMemoryFile, writeMemoryTopic } from "../workspace.ts";
+import { DATA_DIR } from "../config.ts";
+import { isSignoffPromise, signoffAction } from "../signoff/guard.ts";
 import { PASS, type RouteHandler } from "./table.ts";
 
 export type ModelSelectionCheck = { ok: true; selection: ModelSelection } | { ok: false; status: number; error: string };
@@ -114,6 +116,11 @@ export function createBotCreateRoutes(deps: BotCreateRouteDeps): RouteHandler {
         return json(res, 403, { error: "Custom approval requires the desktop permission flow. Use the bot creation dialog or choose another level for API creation." });
       }
       if (settings.approvalMode === "full" && HOSTED_WORKSPACE) return json(res, 403, { error: HOSTED_FULL_ACCESS_REFUSAL });
+      if (settings.approvalMode === "full") {
+        const signoffPending = signoffAction("full_access", { dataDir: DATA_DIR });
+        const signoff = isSignoffPromise(signoffPending) ? await signoffPending : signoffPending;
+        if (!signoff.allow) return json(res, 403, { error: signoff.reason ?? "Sign-off required" });
+      }
       if (settings.computer === "local" && settings.approvalMode === "auto" && body.acknowledgeLocalAuto !== true) {
         return json(res, 400, { error: "Auto mode on this computer requires confirming the warning first (acknowledgeLocalAuto)" });
       }

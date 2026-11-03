@@ -4,6 +4,8 @@
 // at every level (own-file-reads.ts). A bot's question always reaches a human.
 
 import { supportsApprovalMode, type ApprovalMode } from "../shared/approval-mode.ts";
+import { DATA_DIR } from "./config.ts";
+import { signoffFullAccessRefusal } from "./signoff/guard.ts";
 import { failedTurnTool, type FailedTurnTool } from "../shared/failed-turn.ts";
 import { isOutboundTool } from "../shared/outbound.ts";
 import type { ProviderAdapter, RequestOutcome } from "./contracts.ts";
@@ -108,7 +110,11 @@ export function autoVerdict(
     return { approve: null, source: "no-grant" };
   }
   // Full's promise is literal, sandbox widening included; entering Full is consent-gated by the bot PATCH endpoint.
-  if (mode === "full") return { approve: `approved ${tool} (full access)`, source: "full-access" };
+  // No sign-off policy file: the check is one stat and returns immediately, so this grant is unchanged.
+  if (mode === "full") {
+    if (signoffFullAccessRefusal({ dataDir: DATA_DIR })) return { approve: null, source: "no-grant" };
+    return { approve: `approved ${tool} (full access)`, source: "full-access" };
+  }
   if (context?.requiresExplicitApproval) return { approve: null, source: "explicit-approval-block" };
   if (isOutboundTool(tool)) return { approve: null, source: "outbound-guard" };
   if (context?.commandAllowed) return { approve: `approved ${tool} (saved command)`, source: "command-allowlist" };

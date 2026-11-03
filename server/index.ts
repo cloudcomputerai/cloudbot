@@ -47,6 +47,7 @@ import { createRoomTurnLevels } from "./room-turn-level.ts";
 import { createSignInSettle } from "./host/sign-in-settle.ts"; import { createPersonLanguages, THIS_COMPUTER } from "./host/person-languages.ts"; import "./server-line-packs.ts"; import { serverLine, setConversationLanguage } from "./server-lines.ts";
 import { RoomMemberLock } from "./room-member-lock.ts";
 import { approvalHeldNote, approvalHeldReason, approvalModeForOrigin, autoVerdict, deliverFullAccessApproval, undeliveredApprovalTool } from "./auto-approve.ts"; import { readsOwnFiles } from "./own-file-reads.ts";
+import { guardTurn, isSignoffPromise, signoffFullAccessRefusal, signoffModelRefusal } from "./signoff/guard.ts";
 import { bindSafetyFloor, denyAtSafetyFloor, heldAtSafetyFloor, safetyFloorOn } from "./safety-floor-gate.ts";
 import { CommandAllowlistStore, commandAllowlistCandidate } from "./command-allowlist.ts";
 import { providerMcpTool, providerToolAllowKey } from "./provider-tool-allow.ts";
@@ -1558,7 +1559,9 @@ function computerPlaceRefusal(kind: ComputerKind): { message: string; code: "clo
 }
 function policyModelRefusal(instance: { instanceId: string; driverKind: string }): string | undefined {
   const engine = BUILT_IN_DRIVERS.find(driver => driver.driverKind === instance.driverKind)?.metadata.displayName;
-  return managedPolicy.modelRefusal({ driverKind: instance.driverKind, displayName: engine }, managedDesktop.owns(instance.instanceId));
+  const managed = managedPolicy.modelRefusal({ driverKind: instance.driverKind, displayName: engine }, managedDesktop.owns(instance.instanceId));
+  if (managed) return managed;
+  return signoffModelRefusal(instance.driverKind, { dataDir: DATA_DIR });
 }
 const managedDesktop = new ManagedDesktopProviders({
   registry,
@@ -3180,6 +3183,13 @@ function handleDesktopTrustedApprovalMessage(raw: unknown): boolean {
     const mode = message.mode === "full" || message.mode === "custom" ? message.mode : null;
     if (!requestId) return true;
     if (!botId || !mode) return true;
+    if (mode === "full") {
+      const signoffReason = signoffFullAccessRefusal({ dataDir: DATA_DIR });
+      if (signoffReason) {
+        postDesktopPrivateMessage({ type: "approval-trusted-mode-commit-result", requestId, ok: false, error: signoffReason });
+        return true;
+      }
+    }
     const bot = store.bot(botId);
     if (
       bot?.approvalGrant?.requestId === requestId &&
@@ -3227,6 +3237,13 @@ function handleDesktopTrustedApprovalMessage(raw: unknown): boolean {
       confirm(false, "The approval confirmation was invalid");
       return true;
     }
+    if (mode === "full") {
+      const signoffReason = signoffFullAccessRefusal({ dataDir: DATA_DIR });
+      if (signoffReason) {
+        confirm(false, signoffReason);
+        return true;
+      }
+    }
     const bot = store.bot(botId);
     if (
       bot?.approvalGrant?.requestId === requestId &&
@@ -3273,6 +3290,13 @@ function handleDesktopTrustedApprovalMessage(raw: unknown): boolean {
       activate(false, "The approval activation was invalid");
       return true;
     }
+    if (mode === "full") {
+      const signoffReason = signoffFullAccessRefusal({ dataDir: DATA_DIR });
+      if (signoffReason) {
+        activate(false, signoffReason);
+        return true;
+      }
+    }
     const bot = store.bot(botId);
     if (
       bot?.approvalGrant?.requestId === requestId &&
@@ -3317,6 +3341,13 @@ function handleDesktopTrustedApprovalMessage(raw: unknown): boolean {
       finalize(false, "The approval finalization was invalid");
       return true;
     }
+    if (mode === "full") {
+      const signoffReason = signoffFullAccessRefusal({ dataDir: DATA_DIR });
+      if (signoffReason) {
+        finalize(false, signoffReason);
+        return true;
+      }
+    }
     const bot = store.bot(botId);
     if (
       bot?.approvalGrant?.requestId === requestId &&
@@ -3360,6 +3391,13 @@ function handleDesktopTrustedApprovalMessage(raw: unknown): boolean {
   if (!mode) {
     respond({ ok: false, error: "The approval mode is invalid" });
     return true;
+  }
+  if (mode === "full") {
+    const signoffReason = signoffFullAccessRefusal({ dataDir: DATA_DIR });
+    if (signoffReason) {
+      respond({ ok: false, error: signoffReason });
+      return true;
+    }
   }
   const existing = store.bot(botId);
   if (!existing) {
@@ -7751,6 +7789,17 @@ async function startTurn(
       new Error(`provider instance "${bot.modelSelection.instanceId}" is unavailable — pick another model in settings`),
       { status: 409 },
     );
+  }
+  const signoffPending = guardTurn({
+    dataDir: DATA_DIR,
+    approvalMode: approvalModeFor(bot),
+    provider: instance.driverKind,
+  });
+  const signoff = isSignoffPromise(signoffPending) ? await signoffPending : signoffPending;
+  if (!signoff.allow) {
+    const signoffReason = signoff.reason ?? "Sign-off required";
+    store.appendMessage(threadId, { role: "bot", kind: "text", text: signoffReason });
+    throw Object.assign(new Error(signoffReason), { status: 403, code: "signoff" });
   }
   const policyRefusal = policyModelRefusal(instance);
   if (policyRefusal) throw Object.assign(new Error(policyRefusal), { status: 409, code: "managed_policy" });

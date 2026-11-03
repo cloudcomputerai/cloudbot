@@ -520,6 +520,7 @@ export type AppSettingsSection =
   | "general"
   | "desktopWorkspaces"
   | "organization"
+  | "signoff"
   | "cloudAccount"
   | "appearance"
   | "experimental"

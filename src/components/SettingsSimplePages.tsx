@@ -17,6 +17,7 @@ import { ActivitySection } from "./ActivitySection";
 import { BuiltInBrowserRow } from "./BrowserSettingsRows";
 import { LoginsSettings } from "./LoginsSettings";
 import { OrganizationSettings } from "./OrganizationSettings";
+import { SignoffSettings } from "./SignoffSettings";
 import { CloudPlanRow, CloudPlanFootnote, useCloudPlan } from "./ProIntroduction";
 import { CloudUsageDetails, CloudUsageSummaryView, useCloudUsageSettings } from "./CloudUsageMeter";
 import { SettingRow, SettingsDisclosureRow, SettingsGroup, SettingsRows } from "./SettingsPrimitives";
@@ -89,6 +90,7 @@ export function SimpleGeneralPage({ has, peopleOpen, onLooks }: { has: Has; peop
       )}
       {has("import") && <SettingsGroup label={t("settings.section.import")} block="import"><AdminOnly><ImportSettings /></AdminOnly></SettingsGroup>}
       {has("organization") && <SettingsGroup label={t("settings.section.organization")} block="organization"><OrganizationSettings /></SettingsGroup>}
+      {has("signoff") && <SettingsGroup label={t("settings.section.signoff")} block="signoff"><SignoffSettings /></SettingsGroup>}
       {has("activity") && <SettingsGroup label={t("settings.section.activity")} block="activity"><ActivitySection /></SettingsGroup>}
       <div data-settings-block="advanced-mode" className="scroll-mt-4">
         <SettingsRows><AdvancedModeRow simple /></SettingsRows>

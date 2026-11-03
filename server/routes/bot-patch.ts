@@ -15,7 +15,8 @@ import type { BrowserRuntime } from "../browser-runtime.ts";
 import type { CacheKeepWarm } from "../cache-keepwarm.ts";
 import { cloudBackendChangeError, vpsBotAliasChangeError, vpsLeftBehindNotice, VPS_BOT_ALIAS_CHANGE_ERROR, VPS_BOT_ALIAS_LIFECYCLE_ERROR, VPS_BOT_ALIAS_RESOURCES_ERROR } from "../cloud-backend.ts";
 import * as composio from "../composio.ts";
-import { isValidSshAlias, type AppConfig } from "../config.ts";
+import { DATA_DIR, isValidSshAlias, type AppConfig } from "../config.ts";
+import { isSignoffPromise, signoffAction } from "../signoff/guard.ts";
 import type { ModelSelection } from "../contracts.ts";
 import type { createApprovalModeSupport } from "../harness-capabilities.ts";
 import type { ProviderRegistry } from "../harness/registry.ts";
@@ -491,6 +492,11 @@ export function createBotPatchRoutes(deps: BotPatchRouteDeps): RouteHandler {
       if (HOSTED_WORKSPACE && requestedApprovalMode === "full" &&
         (currentApprovalMode !== "full" || body.applyToAllThreads === true)) {
         return json(res, 403, { error: HOSTED_FULL_ACCESS_REFUSAL });
+      }
+      if (requestedApprovalMode === "full") {
+        const signoffPending = signoffAction("full_access", { dataDir: DATA_DIR });
+        const signoff = isSignoffPromise(signoffPending) ? await signoffPending : signoffPending;
+        if (!signoff.allow) return json(res, 403, { error: signoff.reason ?? "Sign-off required" });
       }
       if (body.applyToAllThreads !== undefined) {
         if (typeof body.applyToAllThreads !== "boolean") return json(res, 400, { error: "applyToAllThreads must be true or false" });

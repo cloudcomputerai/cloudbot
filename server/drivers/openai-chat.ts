@@ -27,6 +27,8 @@ import { toolSchemaProfileFor } from "../tool-schema-profile.ts";
 import { classifyContinuable, writeTurnHandoff } from "../turn-continuation.ts";
 import { KEY_REJECTED_REASON, keyRejected, noteKeyAccepted, noteKeyRejected, rejectsKey } from "../key-rejections.ts";
 import { Agent, fetch as fetchWithoutLimits } from "undici";
+import { DATA_DIR } from "../config.ts";
+import { isSignoffPromise, signoffAction } from "../signoff/guard.ts";
 
 export interface OpenAIChatMessage {
   role: "system" | "user" | "assistant" | "tool";
@@ -342,6 +344,9 @@ export function createOpenAIChatRuntime<Config>(options: RuntimeOptions<Config>)
     tools: ChatToolDefinition[] = [],
     onUsage?: TextGenerationOptions["onUsage"],
   ): Promise<Completion> => {
+    const signoffPending = signoffAction("model_call", { dataDir: DATA_DIR, provider: options.driverKind });
+    const signoff = isSignoffPromise(signoffPending) ? await signoffPending : signoffPending;
+    if (!signoff.allow) throw new Error(signoff.reason ?? "Sign-off required");
     const timeoutController = new AbortController();
     let idleTimer: NodeJS.Timeout | null = null;
     const resetIdleTimer = () => {
