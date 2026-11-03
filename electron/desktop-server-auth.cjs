@@ -1,5 +1,6 @@
 "use strict";
 
+/** The server checks this exact name. A different header makes the desktop window ask for a pairing code. */
 const DESKTOP_MUTATION_HEADER = "X-OpenMausBot-Desktop-Owner";
 
 /** Chromium's webRequest hook cannot see Node fetch, so both paths add the owner capability here. */

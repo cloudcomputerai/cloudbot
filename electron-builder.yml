@@ -1,5 +1,5 @@
 appId: com.openmausbot.app
-productName: OpenMausBot
+productName: CloudBot
 artifactName: OpenMausBot-${version}-${arch}.${ext}
 
 protocols:

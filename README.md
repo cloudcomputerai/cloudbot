@@ -1,6 +1,8 @@
 <div align="center">
 
-# OpenMausBot
+# CloudBot
+
+**by Cloud Computer AI**
 
 **The open-source Grok Bot alternative: your own team of AI bots, in a chat app.**
 
