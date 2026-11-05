@@ -86,8 +86,9 @@ describe("what is sent", () => {
 
   it("asks only when there is something to go on, or the fixed answers are not in the app's language", () => {
     const nothing: SuggestionBasis = { otherJobs: [], language: "English", languageCode: "en", canBrowse: true };
-    expect(isPickedBotName("Pesto")).toBe(true);
-    expect(isPickedBotName("Pesto 2")).toBe(true);
+    expect(isPickedBotName("Whiskers")).toBe(true);
+    expect(isPickedBotName("Whiskers 2")).toBe(true);
+    expect(isPickedBotName("Little Whiskers")).toBe(true);
     expect(isPickedBotName("Bookkeeper")).toBe(false);
     expect(worthAsking(nothing, null)).toBe(false);
     expect(worthAsking(nothing, { known: [] })).toBe(false);
@@ -111,7 +112,7 @@ describe("what is sent", () => {
     const place = { bots, shared: false, aboutMe: "I keep the books for a bakery.", languageCode: "pt-BR", canBrowse: true };
     expect(suggestionBasis(made, place)).toEqual({ name: "Ledger", title: "Bookkeeper", department: "Finance", aboutMe: "I keep the books for a bakery.",
       otherJobs: ["Travel planner", "Plans meals"], language: "Brazilian Portuguese", languageCode: "pt-BR", canBrowse: true });
-    expect(suggestionBasis(bot({ id: "new", name: "Pesto 2" }), { ...place, shared: true })).toEqual({ otherJobs: [], language: "Brazilian Portuguese",
+    expect(suggestionBasis(bot({ id: "new", name: "Whiskers 2" }), { ...place, shared: true })).toEqual({ otherJobs: [], language: "Brazilian Portuguese",
       languageCode: "pt-BR", canBrowse: true });
   });
 });

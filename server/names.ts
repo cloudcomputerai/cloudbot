@@ -1,27 +1,60 @@
-const NAMES = [
-  "Scout", "Pixel", "Atlas", "Nova", "Juno", "Koda", "Miso", "Mochi",
-  "Biscuit", "Pepper", "Clover", "Ember", "Willow", "Comet", "Orbit", "Echo",
-  "Indigo", "Sage", "Zephyr", "Poppy", "Maple", "Cosmo", "Luna", "Otto",
-  "Ivy", "Finch", "Wren", "Basil", "Hazel", "Nimbus", "Onyx", "Pearl",
-  "Quill", "Rocket", "Sunny", "Tango", "Vega", "Waffle", "Ziggy", "Noodle",
-  "Pickle", "Churro", "Panko", "Dumpling", "Pesto", "Olive", "Cocoa", "Taffy",
-  "Bramble", "Fig", "Juniper", "Moss", "Pebble", "Rio", "Skye", "Tuli",
-  "Ursa", "Yuki", "Zuko", "Momo", "Kiwi", "Plum", "Sprout", "Turnip",
+/** Plain cat names the plus button offers first. */
+const CATS = [
+  "Whiskers", "Tabby", "Mittens", "Patches", "Simba", "Nala", "Jinx", "Kiki",
+  "Soot", "Bean", "Muffin", "Ginger", "Daisy", "Blaze", "Zippy", "Astro",
+  "Purr", "Bluebell", "Catnip", "Breeze", "Petal", "Amber", "Orion", "Moon",
+  "Otis", "Pippin", "Chip", "Dill", "Nutmeg", "Cloud", "Jet", "Opal",
+  "Zoom", "Buttercup", "Twirl", "Lyra", "Zigzag", "Ramen", "Gherkin", "Cinnamon",
+  "Crumbs", "Bao", "Parsley", "Olly", "Mocha", "Toffee", "Thicket", "Figaro",
+  "Junie", "Lichen", "Pebbles", "Rico", "Skylar", "Tulip", "Leo", "Snowball",
+  "Ash", "Mimi", "Lime", "Violet", "Bud", "Radish", "Smokey", "Socks",
+  "Inky", "Tiger", "Bumble", "Oscar", "Salem", "Misty", "Blink", "Felix",
+  "Pounce", "Shadow", "Boots", "Oreo", "Pumpkin", "Peanut", "Milo", "Marmalade",
+  "Cleo", "Chloe", "Lucy", "Sophie", "Lily", "Bella", "Max", "Charlie",
+  "Oliver", "Jasper", "Louie", "Benny", "Hank", "Gus", "Archie", "Winston",
+  "Binx", "Marble", "Tigger", "Coco", "Midnight", "Smudge", "Nibbles", "Pudding",
 ];
 
-export function pickBotName(taken: Iterable<string>): string {
-  const used = new Set([...taken].map((n) => n.trim().toLowerCase()));
-  const free = NAMES.filter((n) => !used.has(n.toLowerCase()));
-  if (free.length > 0) return free[Math.floor(Math.random() * free.length)];
-  const base = NAMES[Math.floor(Math.random() * NAMES.length)];
+/** Put in front of a cat name once every plain name is taken, so the plus button keeps making new ones. */
+const WORDS = [
+  "Little", "Big", "Tiny", "Fluffy", "Sir", "Lady", "Captain", "Baby", "Old", "Young",
+  "Sleepy", "Sneaky", "Lucky", "Fancy", "Fuzzy", "Quick", "Quiet", "Bold", "Shy", "Happy",
+  "Silver", "Golden", "Snowy", "Dusty", "Velvet", "Cosy", "Wild", "Gentle", "Brave", "Sweet",
+];
+
+const CAT_SET = new Set(CATS.map((name) => name.toLowerCase()));
+const WORD_SET = new Set(WORDS.map((word) => word.toLowerCase()));
+
+function freeOne(options: readonly string[], used: Set<string>): string | undefined {
+  const free = options.filter((name) => !used.has(name.toLowerCase()));
+  if (free.length === 0) return undefined;
+  return free[Math.floor(Math.random() * free.length)];
+}
+
+function numbered(base: string, used: Set<string>): string {
   for (let i = 2; ; i++) {
-    if (!used.has(`${base.toLowerCase()} ${i}`)) return `${base} ${i}`;
+    const candidate = `${base} ${i}`;
+    if (!used.has(candidate.toLowerCase())) return candidate;
   }
 }
 
-const PICKED = new Set(NAMES.map((name) => name.toLowerCase()));
+/** A cat name no bot already has. Plain names first, then "Little Whiskers", then "Whiskers 2", and so on. */
+export function pickBotName(taken: Iterable<string>): string {
+  const used = new Set([...taken].map((name) => name.trim().toLowerCase()));
+  const plain = freeOne(CATS, used);
+  if (plain) return plain;
+  const paired = WORDS.flatMap((word) => CATS.map((cat) => `${word} ${cat}`));
+  const combo = freeOne(paired, used);
+  if (combo) return combo;
+  const base = paired[Math.floor(Math.random() * paired.length)] ?? CATS[0];
+  return numbered(base, used);
+}
 
-/** A name pickBotName could have given ("Pesto", "Pesto 2"): New bot sends one from /api/bot-defaults' suggestedName. */
+/** A name pickBotName could have given ("Whiskers", "Little Whiskers", "Whiskers 2"). */
 export function isPickedBotName(name: string): boolean {
-  return PICKED.has(name.trim().toLowerCase().replace(/ \d+$/, ""));
+  const base = name.trim().toLowerCase().replace(/ \d+$/, "");
+  if (CAT_SET.has(base)) return true;
+  const space = base.indexOf(" ");
+  if (space <= 0) return false;
+  return WORD_SET.has(base.slice(0, space)) && CAT_SET.has(base.slice(space + 1));
 }
